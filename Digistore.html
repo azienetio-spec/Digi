@@ -1,0 +1,222 @@
+import React, { useState, useEffect } from 'react';
+import { Download, CheckCircle, ShoppingBag, Star, Users, Award } from 'lucide-react';
+
+export default function DigitalStore() {
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
+
+  // Check URL for success parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') === 'true') {
+      setShowSuccess(true);
+      setOrderDetails({
+        orderId: params.get('order_id') || 'ORD' + Date.now(),
+        productName: params.get('product') || 'Premium Business Guide'
+      });
+    }
+  }, []);
+
+  // Product configuration
+  const product = {
+    name: "Ultimate Business Pivot Strategies",
+    price: 499,
+    originalPrice: 1499,
+    description: "Complete guide with 50+ proven pivot strategies, templates, and real case studies",
+    features: [
+      "50+ Pivot Strategy Templates",
+      "Real Business Case Studies",
+      "Implementation Checklist",
+      "ROI Calculator Spreadsheet"
+    ],
+    razorpayLink: "https://razorpay.me/@yourusername/499" // Replace with your link
+  };
+
+  const testimonials = [
+    { name: "Priya Sharma", role: "Startup Founder", text: "This guide helped me pivot my business in just 2 weeks!" },
+    { name: "Rajesh Kumar", role: "Business Owner", text: "Incredibly practical strategies. Worth every rupee." }
+  ];
+
+  const handleBuyNow = () => {
+    // In production, append product details to Razorpay link
+    const paymentUrl = `${product.razorpayLink}?product=${encodeURIComponent(product.name)}`;
+    window.location.href = paymentUrl;
+  };
+
+  const handleDownload = () => {
+    // Replace with your actual product file URL
+    const fileUrl = "https://your-cloud-storage.com/product.pdf";
+    window.open(fileUrl, '_blank');
+  };
+
+  if (showSuccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
+          <div className="mb-6">
+            <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Successful! 🎉</h1>
+            <p className="text-gray-600">Order ID: {orderDetails?.orderId}</p>
+          </div>
+          
+          <div className="bg-green-50 rounded-xl p-6 mb-6">
+            <p className="text-lg font-semibold text-gray-900 mb-2">{orderDetails?.productName}</p>
+            <p className="text-sm text-gray-600 mb-4">Your purchase is ready to download</p>
+            
+            <button
+              onClick={handleDownload}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors"
+            >
+              <Download className="w-5 h-5" />
+              Download Now
+            </button>
+          </div>
+
+          <div className="text-sm text-gray-500 space-y-2">
+            <p>✅ Download link also sent to your email</p>
+            <p>Need help? Contact: support@yourstore.com</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="w-6 h-6 text-indigo-600" />
+            <span className="text-xl font-bold text-gray-900">BizStore</span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">2,500+ buyers</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <Award className="w-4 h-4" />
+            Bestseller in Business Strategy
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+            Transform Your Business<br />with Proven Pivot Strategies
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Get instant access to battle-tested frameworks used by successful Indian entrepreneurs
+          </p>
+        </div>
+
+        {/* Product Card */}
+        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <div className="md:flex">
+            {/* Product Image */}
+            <div className="md:w-2/5 bg-gradient-to-br from-indigo-600 to-purple-600 p-12 flex items-center justify-center">
+              <div className="text-center text-white">
+                <div className="text-6xl mb-4">📊</div>
+                <div className="text-2xl font-bold">Premium</div>
+                <div className="text-lg">Digital Guide</div>
+              </div>
+            </div>
+
+            {/* Product Details */}
+            <div className="md:w-3/5 p-8">
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                  <span className="text-sm text-gray-600">(500+ reviews)</span>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-3">{product.name}</h2>
+                <p className="text-gray-600 mb-4">{product.description}</p>
+              </div>
+
+              {/* Features */}
+              <div className="mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">What's Included:</h3>
+                <ul className="space-y-2">
+                  {product.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Pricing */}
+              <div className="border-t pt-6">
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-4xl font-bold text-gray-900">₹{product.price}</span>
+                  <span className="text-xl text-gray-400 line-through">₹{product.originalPrice}</span>
+                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                    67% OFF
+                  </span>
+                </div>
+
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+                >
+                  Buy Now - Instant Access
+                </button>
+
+                <div className="mt-4 flex items-center justify-center gap-6 text-sm text-gray-600">
+                  <span>🔒 Secure Payment</span>
+                  <span>💳 UPI, Cards, Wallets</span>
+                  <span>⚡ Instant Delivery</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Testimonials */}
+        <div className="mt-12 max-w-4xl mx-auto">
+          <h3 className="text-2xl font-bold text-center mb-6">What Buyers Say</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {testimonials.map((testimonial, idx) => (
+              <div key={idx} className="bg-white p-6 rounded-2xl shadow-lg">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-4">"{testimonial.text}"</p>
+                <div>
+                  <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                  <p className="text-sm text-gray-600">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Trust Badges */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex flex-wrap items-center justify-center gap-8 bg-white px-8 py-4 rounded-2xl shadow-md">
+            <span className="text-gray-700">✅ Instant Download</span>
+            <span className="text-gray-700">💯 Money-back Guarantee</span>
+            <span className="text-gray-700">📧 Lifetime Support</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-400 py-8 mt-16">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p>© 2025 BizStore. Made in India 🇮🇳</p>
+          <p className="text-sm mt-2">Contact: support@yourstore.com</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
